@@ -63,7 +63,7 @@ While all group members contributed equally across all three components, the pri
 ## Generative AI Usage
 Generative AI (LLMs) was used strictly in compliance with the course guidelines. It was utilized primarily for:
 * Brainstorming ideas (e.g., sourcing and balancing options), with no AI decision-making.
-* Assisting with code generation (strictly under supervision and for clearly specified tasks).
+* Assisting with code generation (strictly under supervision and for clearly specified tasks, such as functions, figures or commits).
 * Helping with the writing and refinement of the final report text.
 All algorithmic decisions and analytical interpretations remain entirely our own, and we have critically reviewed and validated all AI-assisted outputs.
 
