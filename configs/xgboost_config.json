@@ -1,0 +1,17 @@
+{
+    "model_params": {
+        "objective": "binary:logistic",
+        "eval_metric": "logloss",
+        "use_label_encoder": false
+    },
+    "cv_param_grid": {
+        "max_depth": [3, 5, 7],
+        "learning_rate": [0.01, 0.1, 0.2],
+        "n_estimators": [100, 200, 300],
+        "subsample": [0.8, 1.0],
+        "colsample_bytree": [0.8, 1.0]
+    },
+    "cv_folds": 5,
+    "test_size": 0.2,
+    "random_state": 42
+}
