@@ -6,6 +6,7 @@ and run the fairness evaluation and threshold optimization.
 """
 
 import sys
+import joblib
 from pathlib import Path
 
 # Add project root to Python path so `src` can be imported
@@ -36,9 +37,17 @@ def run_fairness_pipeline():
     data = preprocess_dataset(data)
     X_train, X_test, y_train, y_test, gender_train, gender_test = split_dataset(data)
 
-    print("\n[pipeline] STEP 2: MODEL TRAINING")
-    model = train_xgboost(X_train, y_train, save_dir=MODELS_DIR)
-    evaluate_performance(model, X_test, y_test, save_path=RESULTS_DIR / "baseline_performance.json")
+    print("\n[pipeline] STEP 2: MODEL TRAINING / LOADING")
+
+    model_path = MODELS_DIR / "best_xgboost.joblib"
+
+    if model_path.exists():
+        print(f"[pipeline] Loading existing model from {model_path}")
+        model = joblib.load(model_path)
+    else:
+        print("[pipeline] No saved model found. Training new model...")
+        model = train_xgboost(X_train, y_train, save_dir=MODELS_DIR)
+        evaluate_performance(model, X_test, y_test, save_path=RESULTS_DIR / "baseline_performance.json")
 
     print("\n[pipeline] STEP 3: FAIRNESS EVALUATION (BASELINE)")
     y_pred_baseline = model.predict(X_test)
