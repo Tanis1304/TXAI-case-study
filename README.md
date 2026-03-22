@@ -47,25 +47,19 @@ python src/xai/run_xai.py
 ```
 This script computes local TreeSHAP values, quantifies disparities across groups (our primary RQ), maps error drivers, validates the findings against native split-gain importance and permutation importance, and assesses stability using 10-fold bootstapping. Outputs are saved to `results/xai/`.
 
-## Model Configuration and Cross-Validation
-The hyperparameter configuration for the XGBoost model (found in `configs/xgboost_config.json`) utilizes standard, widely-accepted ranges:
-* **Max Depth (3, 5, 7):** Prevents both underfitting and severe overfitting.
-* **Learning Rate (0.01, 0.1, 0.2):** Standard step sizes for gradient descent.
-* **N-estimators (100, 200, 300):** Provides a robust number of boosting rounds.
-* **Cross-Validation:** We employ stratified 5-fold cross-validation, which is the industry standard for reliable performance estimation without excessive computational expense.
-
 ## Contributions
-While all group members contributed equally across all three components, the primary leads for each area were:
-* **Guillermo Gil de Avalle Bellido:** Lead for coding and algorithmic implementation.
-* **Anastasios Koukas:** Lead for the final presentation.
-* **Leon Tanis:** Lead for the integrated scientific report.
+While all group members had equal contributions to the project, the primary person (who led the "push") for each area were:
+* **Anastasios Koukas:** Final presentation.
+* **Leon Tanis:** Scientific report.
+* **Guillermo Gil de Avalle Bellido:** Coding and algorithmic implementation.
+
 
 ## Generative AI Usage
 Generative AI (LLMs) was used strictly in compliance with the course guidelines. It was utilized primarily for:
 * Brainstorming ideas (e.g., sourcing and balancing options), with no AI decision-making.
-* Assisting with code generation (strictly under supervision and for clearly specified tasks, such as functions, figures or commits).
-* Helping with the writing and refinement of the final report text.
-All algorithmic decisions and analytical interpretations remain entirely our own, and we have critically reviewed and validated all AI-assisted outputs.
+* Assisting with code generation (strictly under supervision and for clearly specified tasks).
+* Helping with the writing and refinement of this README and the final report.
+All algorithmic decisions and analytical interpretations remain entirely our own as per the course suggestions, and we have critically reviewed and validated all AI-assisted outputs.
 
 ## Crediting Sources
 
