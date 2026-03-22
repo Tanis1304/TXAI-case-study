@@ -30,7 +30,7 @@ def _ensure_dir():
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def plot_fairness_comparison(tradeoff: dict, save: bool = True):
+def plot_fairness_comparison(tradeoff: dict, flag: int, save: bool = True):
     """Side-by-side grouped bar chart showing the Gap in EO and PP 
     before vs after threshold optimization (Holistic Refinement).
     """
@@ -72,8 +72,12 @@ def plot_fairness_comparison(tradeoff: dict, save: bool = True):
 
     plt.tight_layout()
     if save:
-        fig.savefig(FIG_DIR / "fairness_intervention_impact.png", dpi=300)
-        print("[plots] Saved fairness_intervention_impact.png")
+        if flag==0:
+            fig.savefig(FIG_DIR / "fairness_intervention_impact.png", dpi=300)
+            print("[plots] Saved fairness_intervention_impact.png")
+        elif flag==1:
+            fig.savefig(FIG_DIR / "fairness_intervention_impact_prp.png", dpi=300)
+            print("[plots] Saved fairness_intervention_impact_prp.png")
     plt.close(fig)
 
 

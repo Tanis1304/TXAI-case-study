@@ -54,7 +54,7 @@ def run_fairness_pipeline():
     compute_all_fairness_metrics(y_test, y_pred_baseline, gender_test)
     plot_roc_by_gender(model, X_test, y_test, gender_test)
 
-    print("\n[pipeline] STEP 4: FAIRNESS INTERVENTION")
+    print("\n[pipeline] STEP 4a: FAIRNESS INTERVENTION (Equalized Odds)")
     y_pred_mitigated, _ = apply_threshold_optimization(
         model, X_train, y_train, gender_train,
         X_test, y_test, gender_test,
@@ -66,7 +66,22 @@ def run_fairness_pipeline():
         save_path=RESULTS_DIR / "fairness_tradeoff.json",
     )
 
-    plot_fairness_comparison(tradeoff)
+    plot_fairness_comparison(tradeoff,0)
+
+    print("\n[pipeline] STEP 4b: FAIRNESS INTERVENTION (TPR Parity)")
+    y_pred_mitigated, _ = apply_threshold_optimization(
+        model, X_train, y_train, gender_train,
+        X_test, y_test, gender_test,
+        constraint="true_positive_rate_parity",
+    )
+
+    tradeoff = fairness_tradeoff_analysis(
+        y_test, y_pred_baseline, y_pred_mitigated, gender_test,
+        save_path=RESULTS_DIR / "fairness_tradeoff_prp.json",
+    )
+
+    plot_fairness_comparison(tradeoff,1)
+
 
     print("\n[done] Fairness pipeline complete. Outputs saved to results/fairness/")
 
