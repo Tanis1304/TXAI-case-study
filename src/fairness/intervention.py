@@ -24,7 +24,7 @@ def apply_threshold_optimization(
     X_test: pd.DataFrame,
     y_test: pd.Series,
     gender_test: pd.Series,
-    constraint: str = "equalized_odds",
+    constraint: str = "true_positive_rate_parity",
 ) -> tuple:
     """Apply post-processing threshold optimization for fairness.
 
@@ -34,7 +34,7 @@ def apply_threshold_optimization(
     X_train, y_train, gender_train : training data (needed to fit thresholds)
     X_test, y_test, gender_test : test data for evaluation
     constraint : fairness constraint for ThresholdOptimizer
-                 (``"equalized_odds"`` or ``"demographic_parity"``)
+                 (``"equalized_odds"`` or ``"true_positive_rate_parity"``)
 
     Returns
     -------

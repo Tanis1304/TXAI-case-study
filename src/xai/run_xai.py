@@ -7,6 +7,7 @@ and run the SHAP explainability analysis focusing on Feature Importance by Gende
 
 import json
 import sys
+import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -36,12 +37,20 @@ def run_xai_pipeline():
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
-    print("\n[pipeline] STEP 1: DATA LOADING & MODEL TRAINING")
+    print("\n[pipeline] STEP 1: DATA LOADING & MODEL TRAINING/LOADING")
     data = load_dataset(Path("data/cardio_train.csv"))
     data = preprocess_dataset(data)
     X_train, X_test, y_train, y_test, gender_train, gender_test = split_dataset(data)
     
-    model = train_xgboost(X_train, y_train, save_dir=MODELS_DIR)
+    model_path = MODELS_DIR / "best_xgboost.joblib"
+
+    if model_path.exists():
+        print(f"[pipeline] Loading existing model from {model_path}")
+        model = joblib.load(model_path)
+    else:
+        print("[pipeline] No saved model found. Training new model...")
+        model = train_xgboost(X_train, y_train, save_dir=MODELS_DIR)
+        evaluate_performance(model, X_test, y_test, save_path=RESULTS_DIR / "baseline_performance.json")
 
     print("\n[pipeline] STEP 2: SHAP EXPLAINABILITY ANALYSIS")
     shap_values = compute_shap_values(model, X_test)
