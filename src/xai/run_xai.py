@@ -40,8 +40,11 @@ def run_xai_pipeline():
     print("\n[pipeline] STEP 1: DATA LOADING & MODEL TRAINING/LOADING")
     data = load_dataset(Path("data/cardio_train.csv"))
     data = preprocess_dataset(data)
-    X_train, X_test, y_train, y_test, gender_train, gender_test = split_dataset(data)
-    
+    (
+        X_train, X_val, X_test,
+        y_train, y_val, y_test,
+        gender_train, gender_val, gender_test
+    ) = split_dataset(data)
     model_path = MODELS_DIR / "best_xgboost.joblib"
 
     if model_path.exists():

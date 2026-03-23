@@ -35,7 +35,11 @@ def run_fairness_pipeline():
     print("\n[pipeline] STEP 1: DATA LOADING & PREPROCESSING")
     data = load_dataset(Path("data/cardio_train.csv"))
     data = preprocess_dataset(data)
-    X_train, X_test, y_train, y_test, gender_train, gender_test = split_dataset(data)
+    (
+        X_train, X_val, X_test,
+        y_train, y_val, y_test,
+        gender_train, gender_val, gender_test
+    ) = split_dataset(data)
 
     print("\n[pipeline] STEP 2: MODEL TRAINING / LOADING")
 
@@ -56,7 +60,8 @@ def run_fairness_pipeline():
 
     print("\n[pipeline] STEP 4a: FAIRNESS INTERVENTION (Equalized Odds)")
     y_pred_mitigated, _ = apply_threshold_optimization(
-        model, X_train, y_train, gender_train,
+        model,
+        X_val, y_val, gender_val,   # fit thresholds here
         X_test, y_test, gender_test,
         constraint="equalized_odds",
     )
@@ -70,7 +75,8 @@ def run_fairness_pipeline():
 
     print("\n[pipeline] STEP 4b: FAIRNESS INTERVENTION (TPR Parity)")
     y_pred_mitigated, _ = apply_threshold_optimization(
-        model, X_train, y_train, gender_train,
+        model,
+        X_val, y_val, gender_val,   # fit thresholds here
         X_test, y_test, gender_test,
         constraint="true_positive_rate_parity",
     )

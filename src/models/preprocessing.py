@@ -78,34 +78,49 @@ def preprocess_dataset(data: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+from sklearn.model_selection import train_test_split
+
 def split_dataset(
     df: pd.DataFrame,
-    test_size: float = TEST_SIZE,
+    test_size: float = 0.2,
+    val_size: float = 0.2,
     random_state: int = RANDOM_STATE,
 ):
-    """Split into train/test, returning features, labels, and gender arrays.
+    """Split into train/val/test, returning features, labels, and gender arrays.
 
-    Returns
-    -------
-    X_train, X_test : pd.DataFrame
-        Feature matrices (gender is kept as a feature for the model).
-    y_train, y_test : pd.Series
-        Binary target (cardio).
-    gender_train, gender_test : pd.Series
-        Gender column aligned with train/test rows for fairness evaluation.
+    val_size is the fraction of the remaining train portion used for validation.
+    For example: test_size=0.2, val_size=0.2 -> 64/16/20 train/val/test.
     """
     y = df["cardio"]
     gender = df["gender"]
     X = df.drop(columns=["cardio"])
 
-    X_train, X_test, y_train, y_test, gender_train, gender_test = train_test_split(
+    # First split: train+val vs test
+    X_trainval, X_test, y_trainval, y_test, gender_trainval, gender_test = train_test_split(
         X, y, gender,
         test_size=test_size,
         random_state=random_state,
         stratify=y,
     )
 
-    print(f"[preprocessing] Train: {len(X_train)} | Test: {len(X_test)}")
-    print(f"[preprocessing] Gender distribution (test) — "
-          f"Female: {(gender_test == 1).sum()}, Male: {(gender_test == 2).sum()}")
-    return X_train, X_test, y_train, y_test, gender_train, gender_test
+    # Second split: train vs val
+    X_train, X_val, y_train, y_val, gender_train, gender_val = train_test_split(
+        X_trainval, y_trainval, gender_trainval,
+        test_size=val_size,
+        random_state=random_state,
+        stratify=y_trainval,
+    )
+
+    print(
+        f"[preprocessing] Train: {len(X_train)} | Val: {len(X_val)} | Test: {len(X_test)}"
+    )
+    print(
+        f"[preprocessing] Gender distribution (test) — "
+        f"Female: {(gender_test == 1).sum()}, Male: {(gender_test == 2).sum()}"
+    )
+
+    return (
+        X_train, X_val, X_test,
+        y_train, y_val, y_test,
+        gender_train, gender_val, gender_test,
+    )
