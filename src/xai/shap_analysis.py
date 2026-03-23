@@ -129,7 +129,7 @@ def groupwise_shap_analysis(
     ax1.barh(x, display_order["delta_j"], color=delta_colors, edgecolor="white")
     ax1.axvline(0, color="black", linewidth=1.5, zorder=3)
     ax1.set_xlabel("Δ_j  (Positive = Higher importance for Women)", fontsize=12)
-    ax1.set_title("Difference in Reliance (Female − Male)", fontsize=14, pad=15)
+    ax1.set_title("Difference in Importance (Female − Male)", fontsize=14, pad=15)
 
     sns.despine(left=True, ax=ax0)
     sns.despine(left=True, ax=ax1)
